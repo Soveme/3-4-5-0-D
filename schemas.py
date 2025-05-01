@@ -1,19 +1,16 @@
 from pydantic import BaseModel
-from datetime import date
-from typing import Optional
+from datetime import datetime
+from typing import Optional, List
 
-class ExpenseBase(BaseModel):
-    amount: float
-    category_id: int
-    date: date
-    description: Optional[str] = None
+class UserBase(BaseModel):
+    email: str
 
-class ExpenseCreate(ExpenseBase):
-    pass
+class UserCreate(UserBase):
+    password: str
 
-class Expense(ExpenseBase):
+class User(UserBase):
     id: int
-    user_id: int
+    is_active: bool
     class Config:
         orm_mode = True
 
@@ -25,6 +22,24 @@ class CategoryCreate(CategoryBase):
 
 class Category(CategoryBase):
     id: int
+    user_id: Optional[int]
+    class Config:
+        orm_mode = True
+
+class ExpenseBase(BaseModel):
+    amount: float
+    category_id: int
+    description: Optional[str] = None
+
+class ExpenseCreate(ExpenseBase):
+    date: Optional[datetime] = None
+    group_id: Optional[int] = None
+
+class Expense(ExpenseBase):
+    id: int
+    date: datetime
+    user_id: int
+    group_id: Optional[int]
     class Config:
         orm_mode = True
 
@@ -34,10 +49,12 @@ class BudgetBase(BaseModel):
     period: str
 
 class BudgetCreate(BudgetBase):
-    pass
+    group_id: Optional[int] = None
 
 class Budget(BudgetBase):
     id: int
+    user_id: Optional[int]
+    group_id: Optional[int]
     class Config:
         orm_mode = True
 
@@ -45,10 +62,18 @@ class GroupBase(BaseModel):
     name: str
 
 class GroupCreate(GroupBase):
-    admin_id: int
+    pass
 
 class Group(GroupBase):
     id: int
     admin_id: int
+    members: List[User]
     class Config:
         orm_mode = True
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
