@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from models import User, Category, Expense, Budget, Group, GroupMember
 from schemas import UserCreate, CategoryCreate, ExpenseCreate, BudgetCreate, GroupCreate
@@ -28,7 +29,13 @@ def get_categories(db: Session, user_id: int = None):
     return db.query(Category).filter(Category.user_id == None).all()
 
 def create_expense(db: Session, expense: ExpenseCreate, user_id: int):
-    db_expense = Expense(**expense.model_dump(), user_id=user_id, date=expense.date)
+    db_expense = Expense(
+        amount=expense.amount,
+        category_id=expense.category_id,
+        date=expense.date,
+        description=expense.description,
+        user_id=user_id
+    )
     db.add(db_expense)
     db.commit()
     db.refresh(db_expense)
@@ -62,20 +69,22 @@ def get_budgets(db: Session, user_id: int = None, group_id: int = None):
     return query.all()
 
 def create_group(db: Session, group: GroupCreate, admin_id: int):
-    db_group = Group(**group.model_dump(), admin_id=admin_id)
+    db_group = Group(name=group.name, admin_id=admin_id)
     db.add(db_group)
     db.commit()
     db.refresh(db_group)
-    db_member = GroupMember(user_id=admin_id, group_id=db_group.id)
-    db.add(db_member)
-    db.commit()
     return db_group
 
-def add_group_member(db: Session, group_id: int, user_id: int, admin_id: int):
-    group = db.query(Group).filter(Group.id == group_id, Group.admin_id == admin_id).first()
+def add_group_member(db: Session, group_id: int, email: str):
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    group = db.query(Group).filter(Group.id == group_id).first()
     if not group:
-        raise ValueError("Group not found or user is not admin")
-    db_member = GroupMember(user_id=user_id, group_id=group_id)
-    db.add(db_member)
+        raise HTTPException(status_code=404, detail="Group not found")
+    if user in group.members:
+        raise HTTPException(status_code=400, detail="User already in group")
+    group.members.append(user)
+    db.add(GroupMember(user_id=user.id, group_id=group.id))
     db.commit()
-    return db_member
+    return user

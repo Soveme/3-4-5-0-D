@@ -62,14 +62,16 @@ class GroupBase(BaseModel):
     name: str
 
 class GroupCreate(GroupBase):
-    pass
+    admin_id: Optional[int] = None
 
 class Group(GroupBase):
     id: int
     admin_id: int
-    members: List[User]
     class Config:
         orm_mode = True
+
+class GroupMemberCreate(BaseModel):
+    email: str
 
 class Token(BaseModel):
     access_token: str
