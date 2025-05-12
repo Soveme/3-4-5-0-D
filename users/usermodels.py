@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
-from core.database import Base
 from pydantic import BaseModel
+from typing import Optional
+from core.database import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -10,6 +11,7 @@ class User(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
     expenses = relationship("Expense", back_populates="owner")
+    budgets = relationship("Budget", back_populates="user")
     groups = relationship("Group", back_populates="admin")
     group_memberships = relationship("GroupMember", back_populates="user")
 
@@ -18,6 +20,10 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+
+class UserUpdate(UserBase):
+    email: Optional[str] = None
+    password: Optional[str] = None
 
 class UserSchema(UserBase):
     id: int

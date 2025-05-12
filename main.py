@@ -7,6 +7,8 @@ from expenses.expenses import ExpenseDomain
 from categories.categories import CategoryDomain
 from budgets.budgets import BudgetDomain
 from groups.groups import GroupDomain
+from groups.groupmembers import GroupMemberDomain
+
 
 app = FastAPI()
 
@@ -24,9 +26,17 @@ category_domain = CategoryDomain()
 with SessionLocal() as db:
     category_domain.initialize_default_categories(db)
 
-app.include_router(AuthDomain().get_router())
-app.include_router(UserDomain().get_router())
-app.include_router(ExpenseDomain().get_router())
-app.include_router(CategoryDomain().get_router())
-app.include_router(BudgetDomain().get_router())
-app.include_router(GroupDomain().get_router())
+def include_domains():
+    domains = [
+        AuthDomain(),
+        UserDomain(),
+        ExpenseDomain(),
+        CategoryDomain(),
+        BudgetDomain(),
+        GroupDomain(),
+        GroupMemberDomain()
+    ]
+    for domain in domains:
+        app.include_router((domain.get_router()))
+
+include_domains()

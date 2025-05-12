@@ -13,24 +13,17 @@ class Group(Base):
     admin = relationship("User", back_populates="groups")
     members = relationship("GroupMember", back_populates="group")
 
-class GroupMember(Base):
-    __tablename__ = "group_members"
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
-    group_id = Column(Integer, ForeignKey("groups.id"), primary_key=True)
-    user = relationship("User", back_populates="group_memberships")
-    group = relationship("Group", back_populates="members")
-
 class GroupBase(BaseModel):
     name: str
 
 class GroupCreate(GroupBase):
-    admin_id: Optional[int] = None
+    pass
+
+class GroupUpdate(GroupBase):
+    name: Optional[str] = None
 
 class GroupSchema(GroupBase):
     id: int
     admin_id: int
     class Config:
         orm_mode = True
-
-class GroupMemberCreate(BaseModel):
-    email: str

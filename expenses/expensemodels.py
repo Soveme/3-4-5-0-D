@@ -27,7 +27,14 @@ class ExpenseBase(BaseModel):
 class ExpenseCreate(ExpenseBase):
     pass
 
+class ExpenseUpdate(ExpenseBase):
+    amount: Optional[float] = None
+    category_id: Optional[int] = None
+    date: Optional[date] = None
+    description: Optional[str] = None
+
 class ExpenseSchema(ExpenseBase):
     id: int
+    user_id: int
     class Config:
         orm_mode = True

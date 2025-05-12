@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from core.database import Base
 from pydantic import BaseModel
+from typing import Optional
+from core.database import Base
 
 
 class Category(Base):
@@ -16,7 +17,7 @@ class CategoryCreate(CategoryBase):
     pass
 
 class CategoryUpdate(CategoryBase):
-    pass
+    name: Optional[str] = None
 
 class CategorySchema(CategoryBase):
     id: int
