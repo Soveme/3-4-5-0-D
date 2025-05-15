@@ -9,21 +9,21 @@ from core.database import Base
 class Budget(Base):
     __tablename__ = "budgets"
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    group_id = Column(Integer, ForeignKey("groups.id"))
     category_id = Column(Integer, ForeignKey("categories.id"))
     limit = Column(Float)
     start_date = Column(Date)
     end_date = Column(Date)
-    user = relationship("User")
+    created_by = Column(Integer, ForeignKey("users.id"))
+    group = relationship("Group", back_populates="budgets")
     category = relationship("Category")
+    creator = relationship("User")
 
 class BudgetBase(BaseModel):
     category_id: int
     limit: float
     start_date: date
     end_date: date
-    user_id: Optional[int] = None
-    group_id: Optional[int] = None
 
 class BudgetCreate(BudgetBase):
     pass
@@ -36,6 +36,7 @@ class BudgetUpdate(BudgetBase):
 
 class BudgetSchema(BudgetBase):
     id: int
-    user_id: int
+    group_id: int
+    created_by: int
     class Config:
         orm_mode = True

@@ -10,7 +10,7 @@ class GroupMember(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     group_id = Column(Integer, ForeignKey("groups.id"))
-    role = Column(String, default="viewer")  # viewer, editor
+    role = Column(String, default="viewer")  # viewer, editor, admin
     user = relationship("User", back_populates="group_memberships")
     group = relationship("Group", back_populates="members")
 

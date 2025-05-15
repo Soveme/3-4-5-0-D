@@ -13,9 +13,11 @@ class Expense(Base):
     category_id = Column(Integer, ForeignKey("categories.id"))
     date = Column(Date)
     description = Column(String, nullable=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    owner = relationship("User", back_populates="expenses")
+    group_id = Column(Integer, ForeignKey("groups.id"))
+    created_by = Column(Integer, ForeignKey("users.id"))
+    group = relationship("Group", back_populates="expenses")
     category = relationship("Category")
+    creator = relationship("User")
 
 class ExpenseBase(BaseModel):
     amount: float
@@ -34,6 +36,7 @@ class ExpenseUpdate(ExpenseBase):
 
 class ExpenseSchema(ExpenseBase):
     id: int
-    user_id: int
+    group_id: int
+    created_by: int
     class Config:
         orm_mode = True
