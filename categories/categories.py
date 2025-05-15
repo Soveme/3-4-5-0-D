@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from core.database import get_db
 from core.base import CRUDBase
-from core.utils import get_current_user
+from core.utils import get_current_user, update_increment_budgets, update_increment_expenses
 from users.usermodels import User
 from .categorymodels import Category, CategoryCreate, CategoryUpdate, CategorySchema
 
@@ -59,6 +59,8 @@ class CategoryDomain(CRUDBase[Category, CategoryCreate, CategoryUpdate]):
                 current_user: User = Depends(get_current_user),
                 db: Session = Depends(get_db)
         ):
+            update_increment_budgets(db=db, id=id, group_id=group_id)
+            update_increment_expenses(db=db, id=id, group_id=group_id)
             return self.delete(db=db, id=id, group_id=group_id, user_id=current_user.id)
 
     def get_router(self):

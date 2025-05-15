@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from typing import TypeVar, Generic, Type, List
 from pydantic import BaseModel
@@ -34,7 +35,7 @@ class CRUDBase(Generic[Model, CreateSchema, UpdateSchema], ABC):
 
     def get_multi(self, db: Session, group_id: int, user_id: int, skip: int = 0, limit: int = 100) -> List[Model]:
         self._check_group_membership(db, group_id, user_id)
-        query = db.query(self.model).filter(self.model.group_id == group_id).offset(skip).limit(limit).all()
+        query = db.query(self.model).filter(or_(self.model.group_id == group_id, self.model.group_id == 0)).offset(skip).limit(limit).all()
         return query
 
     def get(self, db: Session, id: int, group_id: int, user_id: int) -> Model:

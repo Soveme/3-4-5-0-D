@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.database import Base, engine, SessionLocal
+from core.utils import default_categories
 from auth.auth import AuthDomain
 from users.users import UserDomain
 from expenses.expenses import ExpenseDomain
@@ -20,6 +21,9 @@ app.add_middleware(
 )
 
 Base.metadata.create_all(bind=engine)
+
+with SessionLocal() as db:
+    default_categories(db=db, group_id=0, user_id=0)
 
 def include_domains():
     domains = [

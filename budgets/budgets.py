@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 from typing import List
 from core.database import get_db
@@ -33,7 +33,7 @@ class BudgetDomain(CRUDBase[Budget, BudgetCreate, BudgetUpdate]):
         self._check_group_membership(db, group_id, user_id)
         category = db.query(Category).filter(
             Category.id == obj_in.category_id,
-            Category.group_id == group_id
+            or_(Category.group_id == group_id, Category.group_id == 0)
         ).first()
         if not category:
             raise HTTPException(status_code=400, detail="Category not found in this group")

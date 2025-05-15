@@ -21,7 +21,7 @@ class Expense(Base):
 
 class ExpenseBase(BaseModel):
     amount: float
-    category_id: int
+    category_id: Optional[int] = None
     date: date
     description: Optional[str] = None
 

@@ -6,20 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="ff87f2a8-c061-44c0-893d-9e556deadd41" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/budgets/budgetmodels.py" beforeDir="false" afterPath="$PROJECT_DIR$/budgets/budgetmodels.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/budgets/budgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/budgets/budgets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/categories/categories.py" beforeDir="false" afterPath="$PROJECT_DIR$/categories/categories.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/categories/categorymodels.py" beforeDir="false" afterPath="$PROJECT_DIR$/categories/categorymodels.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/expenses/expensemodels.py" beforeDir="false" afterPath="$PROJECT_DIR$/expenses/expensemodels.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/expenses/expenses.py" beforeDir="false" afterPath="$PROJECT_DIR$/expenses/expenses.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/groups/groupmembermodels.py" beforeDir="false" afterPath="$PROJECT_DIR$/groups/groupmembermodels.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/groups/groupmembers.py" beforeDir="false" afterPath="$PROJECT_DIR$/groups/groupmembers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/groups/groupmodels.py" beforeDir="false" afterPath="$PROJECT_DIR$/groups/groupmodels.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/groups/groups.py" beforeDir="false" afterPath="$PROJECT_DIR$/groups/groups.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/usermodels.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/usermodels.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/users.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
