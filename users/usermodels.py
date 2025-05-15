@@ -10,6 +10,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
+    categories = relationship("Category", back_populates="owner")
     expenses = relationship("Expense", back_populates="owner")
     budgets = relationship("Budget", back_populates="user")
     groups = relationship("Group", back_populates="admin")

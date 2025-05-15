@@ -16,44 +16,6 @@ class BudgetDomain(CRUDBase[Budget, BudgetCreate, BudgetUpdate]):
         self.router = APIRouter(prefix="/budgets", tags=["budgets"])
         self._register_routes()
 
-    def create(self, db: Session, obj_in: BudgetCreate, user_id: int) -> Budget:
-        db_obj = Budget(
-            user_id=user_id,
-            category_id=obj_in.category_id,
-            limit=obj_in.limit,
-            start_date=obj_in.start_date,
-            end_date=obj_in.end_date
-        )
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        return db_obj
-
-    def get(self, db: Session, id: int, user_id: int) -> Budget:
-        budget = db.query(Budget).filter(Budget.id == id, Budget.user_id == user_id).first()
-        if not budget:
-            raise HTTPException(status_code=404, detail="Budget not found or not authorized")
-        return budget
-
-    def get_multi(self, db: Session, user_id: int, skip: int = 0, limit: int = 100) -> List[Budget]:
-        return db.query(Budget).filter(Budget.user_id == user_id).offset(skip).limit(limit).all()
-
-    def update(self, db: Session, id: int, obj_in: BudgetUpdate, user_id: int) -> Budget:
-        db_obj = self.get(db, id=id, user_id=user_id)
-        update_data = obj_in.model_dump(exclude_unset=True)
-        for key, value in update_data.items():
-            setattr(db_obj, key, value)
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        return db_obj
-
-    def delete(self, db: Session, id: int, user_id: int) -> Budget:
-        db_obj = self.get(db, id=id, user_id=user_id)
-        db.delete(db_obj)
-        db.commit()
-        return db_obj
-
     def check_budget_exceeded(self, db: Session, budget: Budget) -> bool:
         total_expenses = db.query(func.sum(Expense.amount)).filter(
             Expense.category_id == budget.category_id,

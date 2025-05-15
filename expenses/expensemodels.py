@@ -22,7 +22,6 @@ class ExpenseBase(BaseModel):
     category_id: int
     date: date
     description: Optional[str] = None
-    user_id: Optional[int] = None
 
 class ExpenseCreate(ExpenseBase):
     pass

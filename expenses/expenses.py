@@ -15,25 +15,6 @@ class ExpenseDomain(CRUDBase[Expense, ExpenseCreate, ExpenseSchema]):
         self.router = APIRouter(prefix="/expenses", tags=["expenses"])
         self._register_routes()
 
-    def create(self, db: Session, obj_in: ExpenseCreate, user_id: int) -> Expense:
-        db_expense = Expense(
-            amount=obj_in.amount,
-            category_id=obj_in.category_id,
-            date=obj_in.date,
-            description=obj_in.description,
-            user_id=user_id
-        )
-        db.add(db_expense)
-        db.commit()
-        db.refresh(db_expense)
-        return db_expense
-
-    def get(self, db: Session, id: int, user_id: int) -> Expense:
-        expense = db.query(Expense).filter(Expense.id == id, Expense.user_id == user_id).first()
-        if not expense:
-            raise HTTPException(status_code=404, detail="Expense not found or not authorized")
-        return expense
-
     def get_multi(
         self,
         db: Session,
@@ -60,22 +41,6 @@ class ExpenseDomain(CRUDBase[Expense, ExpenseCreate, ExpenseSchema]):
         if max_amount is not None:
             query = query.filter(Expense.amount <= max_amount)
         return query.offset(skip).limit(limit).all()
-
-    def update(self, db: Session, id: int, obj_in: ExpenseUpdate, user_id: int) -> Expense:
-        db_obj = self.get(db, id=id, user_id=user_id)
-        update_data = obj_in.model_dump(exclude_unset=True)
-        for key, value in update_data.items():
-            setattr(db_obj, key, value)
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        return db_obj
-
-    def delete(self, db: Session, id: int, user_id: int) -> Expense:
-        db_obj = self.get(db, id=id, user_id=user_id)
-        db.delete(db_obj)
-        db.commit()
-        return db_obj
 
     def _register_routes(self):
         @self.router.post("/", response_model=ExpenseSchema)
@@ -125,7 +90,7 @@ class ExpenseDomain(CRUDBase[Expense, ExpenseCreate, ExpenseSchema]):
                 current_user: User = Depends(get_current_user),
                 db: Session = Depends(get_db)
         ):
-            return self.update(db=db, id=id, obj_in=expense_in, user_id=current_user.id)
+            return self.update(db=db, id=id, db_obj=Expense, obj_in=expense_in, user_id=current_user.id)
 
         @self.router.delete("/{id}", response_model=ExpenseSchema)
         def delete_expense(
