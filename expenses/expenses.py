@@ -21,7 +21,7 @@ class ExpenseDomain(CRUDBase[Expense, ExpenseCreate, ExpenseUpdate]):
         self._check_group_membership(db, group_id, user_id)
         category = db.query(Category).filter(
             Category.id == obj_in.category_id,
-            Category.group_id == group_id
+            or_(Category.group_id == group_id, Category.group_id == 0)
         ).first()
         if not category:
             raise HTTPException(status_code=400, detail="Category not found in this group")

@@ -1,7 +1,7 @@
-from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends, HTTPException, Cookie
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
+from typing import Annotated
 
 from budgets.budgetmodels import Budget
 from expenses.expensemodels import Expense
@@ -10,7 +10,6 @@ from .config import settings, pwd_context
 from users.usermodels import User
 from categories.categorymodels import Category
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 def get_user_by_email(db: Session, email: str) -> User:
     return db.query(User).filter(User.email == email).first()
@@ -21,12 +20,21 @@ def authenticate_user(db: Session, email: str, password: str) -> User:
         return None
     return user
 
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
+async def get_current_user(auth_token: Annotated[str | None, Cookie()] = None, db: Session = Depends(get_db)) -> User:
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    if auth_token is None:
+        raise credentials_exception
+
+    # Strip 'Bearer ' prefix if present
+    if auth_token.startswith("Bearer "):
+        token = auth_token[7:]
+    else:
+        raise credentials_exception
+
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         email: str = payload.get("sub")
