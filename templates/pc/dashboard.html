@@ -1,0 +1,310 @@
+{% extends 'layout.html' %}
+{% block title %}Главная{% endblock %}
+{% block groups %}
+	{% for group in groups %}
+	<li>
+		<button class="btn align-items-center rounded border-0 p-1 ps-2 pe-2 ms-5">
+			<a href="/dashboard/{{group['id']}}" class="link-body-emphasis text-decoration-none">{{group["name"]}}</a>
+		</button>
+	</li>
+	{% endfor %}
+{% endblock %}
+{% block username%}{{user.email}}{% endblock %}
+{% block content %}
+
+<div class="row">
+	<div class="col-xl-6 col-lg-6 pb-3">
+		<div class="card h-100 p-4 justify-content-between d-flex flex-row">
+			<div class="h-100 justify-content-around">
+				<h3>Баланс</h3>
+				<h2 class="mt-2 mb-4">{{cur_group["balance"]}} ₽</h2>
+				<h6><span class="text-good"><i class="bi bi-arrow-up"></i>69,5%&nbsp</span>за этот месяц</h6>
+			</div>
+			<canvas id="miniChart"></canvas>
+		</div>
+	</div>
+	<div class="col-xl-6 col-lg-6 pb-3">
+		<div class="card h-100 p-4 justify-content-between d-flex flex-row">
+			<div class="h-100 justify-content-around">
+				<h3>Общие траты</h3>
+				<h2 class="mt-2 mb-4">{{cur_group["expense"]}} ₽</h2>
+				<h6><span class="text-bad"><i class="bi bi-arrow-down"></i>69,5%&nbsp</span>за этот месяц</h6>
+
+			</div>
+			<canvas id="miniChart1"></canvas>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xl-6 col-lg-6 pt-3">
+		<div class="card p-4" style="height: 760px;">
+			<div class="d-flex align-items-center mb-4">
+				<h3>История</h3>
+			</div>
+			<ul class="list-unstyled pb-1 overflow-y-scroll pe-3" style="height: 100%;">
+				{% for exp in cur_exp %}
+				<li>
+					<div class="ms-auto btn-group dropdown-center w-100">
+						<button
+							class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+							data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+							<i class="bi fs-1 bi-cart me-4"></i>
+							<h4>{{exp["category_name"]}}</h4>
+							<h4 class="ms-auto">
+								{% if exp["category_id"] == 1 %}
+								+{{exp["amount"]}} ₽
+								{% else %}
+								-{{exp["amount"]}} ₽
+								{% endif %}
+							</h4>
+						</button>
+						<form action="/expenses/{{exp['group_id']}}/{{exp['id']}}" method="post" class="dropdown-menu p-3 needs-validation" novalidate>
+							<div class="mb-3">
+								<div class="d-flex align-items-center">
+									<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+										required min="0.01" step="0.01" value="{{exp['amount']}}">
+									<p class="fs-5 m-0">₽</p>
+								</div>
+							</div>
+							<div class="mb-3">
+								<label for="cat">Категория</label><br>
+								<select class="form-select form-select-sm inner-shadow border-0" name="category_id"
+									aria-label="Small select example" required>
+									{% for cat in cur_cat %}
+									<option value="{{cat['id']}}">{{cat['name']}}</option>
+									{% endfor %}
+								</select>
+								<div class="invalid-feedback">
+									Выберите категорию
+								</div>
+							</div>
+							<div class="mb-3">
+								<label for="desc">Описание</label>
+								<textarea type="text" class="form-control" id="desc" rows="10"
+									style="resize: none;"></textarea>
+							</div>
+							<button type="submit" class="btn shadow w-100">
+								Изменить пополнение
+							</button>
+						</form>
+					</div>
+				</li>
+				{% endfor %}
+			</ul>
+			<button class="btn">Смотреть все</button>
+		</div>
+	</div>
+	<div class="col-xl-6 col-lg-6 pt-3">
+		<div class="card h-100 p-4 justify-content-start">
+			<div class="d-flex align-items-center">
+				<h3>Категории трат за:</h3>
+				<div class="ms-auto btn-group dropdown-center">
+					<button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 fs-5"
+						data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+						этот месяц
+					</button>
+					<ul class="dropdown-menu">
+						<li>
+							<p onclick="updateTransactions('day')" class="m-0 dropdown-item" href="#">этот день
+							</p>
+						</li>
+						<li>
+							<p onclick="updateTransactions('week')" class="m-0 dropdown-item" href="#">эта
+								неделя</p>
+						</li>
+						<li>
+							<p onclick="updateTransactions('month')" class="m-0 dropdown-item" href="#">этот
+								месяц</p>
+						</li>
+						<li>
+							<p onclick="updateTransactions('year')" class="m-0 dropdown-item" href="#">этот год
+							</p>
+						</li>
+						<li>
+							<div class="d-flex p-2 align-items-center flex-wrap">
+								<p class="m-0 ms-2">период с</p>
+								<input type="date" name="" id="date-start" class="text-light">
+								<p class="m-0 ms-2 mt-2">до</p>
+								<input type="date" name="" id="date-end" class="text-light"><br>
+								<button onclick="updateTransactions('custom')" class="btn mt-2 shadow">
+									Поиск
+								</button>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="chart-container h-75 w-100 mt-5">
+				<canvas id="donutChart"></canvas>
+				<div id="customLegend" class="legend-list"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+	// Тестовые данные: замени на свои при необходимости
+	const dataPoints = [100, 120, 115, 140, 160]; // Пример: возрастающий
+
+	const ctx = document.getElementById("miniChart").getContext("2d");
+
+	// Выбор цвета: зелёный, если последний >= первого, иначе — красный
+	const color = (dataPoints[dataPoints.length - 1] >= dataPoints[0]) ? 'green' : 'red';
+
+	new Chart(ctx, {
+		type: "line",
+		data: {
+			labels: dataPoints.map((_, i) => i),
+			datasets: [{
+				data: dataPoints,
+				borderColor: color,
+				borderWidth: 4,
+				tension: 0.4,
+				pointRadius: .4,
+				fill: false
+			}]
+		},
+		options: {
+			responsive: false,
+			maintainAspectRatio: false,
+			plugins: {
+				legend: { display: false },
+				tooltip: { enabled: false }
+			},
+			scales: {
+				x: { display: false },
+				y: { display: false }
+			}
+		}
+	});
+
+	// Тестовые данные: замени на свои при необходимости
+	const dataPoints1 = [100, 120, 115, 140, 99]; // Пример: возрастающий
+
+	const ctx1 = document.getElementById("miniChart1").getContext("2d");
+
+	// Выбор цвета: зелёный, если последний >= первого, иначе — красный
+	const color1 = (dataPoints1[dataPoints1.length - 1] >= dataPoints1[0]) ? 'green' : 'red';
+
+	new Chart(ctx1, {
+		type: "line",
+		data: {
+			labels: dataPoints1.map((_, i) => i),
+			datasets: [{
+				data: dataPoints1,
+				borderColor: color1,
+				borderWidth: 4,
+				tension: 0.4,
+				pointRadius: .4,
+				fill: false
+			}]
+		},
+		options: {
+			responsive: false,
+			maintainAspectRatio: false,
+			plugins: {
+				legend: { display: false },
+				tooltip: { enabled: false }
+			},
+			scales: {
+				x: { display: false },
+				y: { display: false }
+			}
+		}
+	});
+
+	const testData = [
+		{ category: "Еда", amount: 300 },
+		{ category: "Транспорт", amount: 150 },
+		{ category: "Развлечения", amount: 100 },
+		{ category: "Счета", amount: 200 }
+	];
+
+	const originalColors = testData.map(() => getRandomColor());
+	let selectedCategory = null;
+
+	const chartData = {
+		labels: testData.map(item => item.category),
+		datasets: [{
+			data: testData.map(item => item.amount),
+			backgroundColor: originalColors.slice(),
+			borderWidth: 0,
+            // borderColor: '#000',
+			borderRadius: 50,
+			spacing: 5,
+			cutout: '80%'
+        }]
+	};
+
+	const canvas = document.getElementById('donutChart');
+	const donutChart = new Chart(canvas, {
+		type: 'doughnut',
+		data: chartData,
+		options: {
+			responsive: true,
+			plugins: {
+				legend: {
+					display: false // Отключаем встроенную легенду
+				},
+				tooltip: {
+					callbacks: {
+						label: function (tooltipItem) {
+							return `${tooltipItem.label}: $${tooltipItem.raw}`;
+						}
+					},
+					enabled: true
+				}
+			},
+			hover: {
+				mode: null
+			}
+		}
+	});
+
+	// Рисуем свою легенду справа
+	const legendContainer = document.getElementById('customLegend');
+	chartData.labels.forEach((label, i) => {
+		const item = document.createElement('div');
+		item.className = 'legend-item';
+
+		const colorBox = document.createElement('span');
+		colorBox.className = 'legend-color';
+		colorBox.style.backgroundColor = originalColors[i];
+
+		const text = document.createElement('span');
+		text.textContent = label;
+
+		item.appendChild(colorBox);
+		item.appendChild(text);
+		legendContainer.appendChild(item);
+	});
+
+	canvas.addEventListener('click', (event) => {
+		const elements = donutChart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, false);
+		if (elements.length > 0) {
+			const index = elements[0].index;
+			const category = chartData.labels[index];
+
+			if (selectedCategory === category) {
+				selectedCategory = null;
+			} else {
+				selectedCategory = category;
+			}
+
+			chartData.datasets[0].borderWidth = chartData.labels.map(label =>
+			 	label === selectedCategory ? 3 : 1
+			);
+			chartData.datasets[0].borderColor = chartData.labels.map(label =>
+				label === selectedCategory ? '#ffffff' : '#000000'
+			);
+
+			donutChart.update();
+		}
+	});
+</script>
+
+{% endblock %}

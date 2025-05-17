@@ -14,6 +14,7 @@ from groups.groups import GroupDomain
 
 
 templates_mobile = Jinja2Templates(directory="templates/mobile")
+templates_pc = Jinja2Templates(directory="templates/pc")
 
 class UserDomain(CRUDBase[User, UserCreate, UserUpdate]):
     def __init__(self):
@@ -68,15 +69,24 @@ class UserDomain(CRUDBase[User, UserCreate, UserUpdate]):
             if db_user:
                 return self.templates_mobile.TemplateResponse(name="register.html", context={'request': request, "alert": "Пользователь с таким именем уже есть"})
             self.create(db=db, obj_in=user_in)
-            return self.templates_mobile.TemplateResponse(name="entry.html", context={'request': request})
+            user_agent = request.headers.get("user-agent", "").lower()
+            if "iphone" in user_agent or "ipad" in user_agent or "android" in user_agent:
+                return templates_mobile.TemplateResponse(name="entry.html", context={'request': request})
+            return templates_pc.TemplateResponse(name="login.html", context={'request': request})
 
         @self.router.get("/me", response_model=UserSchema)
         def get_me(request: Request, user: User = Depends(get_current_user)):
-            return self.templates_mobile.TemplateResponse(name="profile.html", context={'request': request, "user": user})
+            user_agent = request.headers.get("user-agent", "").lower()
+            if "iphone" in user_agent or "ipad" in user_agent or "android" in user_agent:
+                return templates_mobile.TemplateResponse(name="profile.html", context={'request': request, "user": user})
+            return templates_pc.TemplateResponse(name="profile.html", context={'request': request, "user": user})
 
         @self.router.get("/edit", response_class=HTMLResponse)
         def edit_user(request: Request, user: User = Depends(get_current_user)):
-            return self.templates_mobile.TemplateResponse(name="edit-profile.html", context={'request': request, "user": user})
+            user_agent = request.headers.get("user-agent", "").lower()
+            if "iphone" in user_agent or "ipad" in user_agent or "android" in user_agent:
+                return templates_mobile.TemplateResponse(name="edit-profile.html", context={'request': request, "user": user})
+            return templates_mobile.TemplateResponse(name="edit-profile.html", context={'request': request, "user": user})
 
         @self.router.post("/{id}", response_model=UserSchema)
         def update_user(

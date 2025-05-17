@@ -87,3 +87,13 @@ def update_increment_budgets(db: Session, id: int, group_id: int):
             db.add(db_obj)
             db.commit()
             db.refresh(db_obj)
+
+def calculate_expenses(db: list) -> float:
+    return sum([exp["amount"] for exp in db if exp["category_id"] != 1])
+
+def calculate_budget(db: list) -> float:
+    return sum([exp["amount"] for exp in db if exp["category_id"] == 1])
+
+def calculate_balance(db: list) -> float:
+    balance = calculate_budget(db) - calculate_expenses(db)
+    return balance

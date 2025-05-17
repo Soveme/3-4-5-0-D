@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Списание</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-        <link rel="stylesheet" href="main.css" type="text/css">
+        <link rel="stylesheet" href="/static/main.css" type="text/css">
     </head>
 
     <div class="balls">
@@ -22,7 +22,7 @@
                 <div class="row head-row">
                     <div class="col-2 head-text">
                         <button class="btn btn-toggle">
-                            <a href="main.html">
+                            <a href="/dashboard/{group_id}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 -960 960 960" fill="var(--bs-body-color)"><path d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"/></svg>
                             </a>
                         </button>
@@ -30,7 +30,7 @@
                     <div class="col-8 head-text"><h1>Списание</h1></div>
                     <div class="col-2 head-text">
                         <button class="btn btn-toggle">
-                            <a href="plus.html">
+                            <a href="/dashboard/{group_id}/plus">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 -960 960 960" fill="var(--bs-body-color)"><path d="m320-160-56-57 103-103H80v-80h287L264-503l56-57 200 200-200 200Zm320-240L440-600l200-200 56 57-103 103h287v80H593l103 103-56 57Z"/></svg>
                             </a>
                         </button>
@@ -41,20 +41,26 @@
 
         <main class="sticky">
             <div class="container big-block">
-                <form action="main.html" method="get" class="needs-validation" novalidate>
+                <form action="/expenses/{{group_id}}" method="post" class="needs-validation" novalidate>
                     <div class="row">
                         <div class="row"><label for="desc">Сумма</label></div>
                         <div class="row">
                             <div class="col p-0">
-                                <input type="number" class="form-control hole m-0 p-3" id="name" required min="0.01" step="0.01" value="0.0"></div>
+                                <input type="number" class="form-control hole m-0 p-3" id="name" name="amount" required min="0.01" step="0.01" value="0.0"></div>
                             <div class="col-1"><p class="fs-5 m-0">₽</p></div>
                         </div>
 
                         <div class="row"><label for="desc">Категория</label></div>
                         <div class="row c">
-                            <select class="form-select form-select-sm hole p-3" aria-label="Small select example" required>
-                                <option value="2">Супермаркет</option>
-                                <option value="3">Еда</option>
+                            <select class="form-select form-select-sm hole p-3" aria-label="Small select example" name="category_id" required>
+                                {% for cat in cur_cat %}
+                                    {% if cat['id'] != 1 %}
+                                        <option value="{{cat['id']}}">{{cat['name']}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <select class="form-select form-select-sm hole p-3" style="display: none;" aria-label="Small select example" name="date" required>
+                                <option value="2025-05-15">today</option>
                             </select>
                             <div class="invalid-feedback">
                                 Выберите категорию
@@ -63,7 +69,7 @@
 
                         <div class="row"><label for="desc">Описание</label></div>
                         <div class="row c">
-                            <textarea type="text" class="form-control hole" id="desc" rows="10" style="resize: none; height: 15vh;"></textarea>
+                            <textarea type="text" class="form-control hole" id="desc" rows="10" style="resize: none; height: 15vh;" name="desc"></textarea>
                         </div>
 
                         <button class="btn btn-block row new-group">

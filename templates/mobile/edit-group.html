@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Редактор Счета</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-        <link rel="stylesheet" href="main.css" type="text/css">
+        <link rel="stylesheet" href="/static/main.css" type="text/css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     </head>
 
@@ -23,38 +23,47 @@
                 <div class="row head-row">
                     <div class="col-2 head-text">
                         <button class="btn btn-toggle">
-                            <a href="main.html">
+                            <a href="/dashboard">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 -960 960 960" fill="var(--bs-body-color)"><path d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"/></svg>
                             </a>
                         </button>
                     </div>
                     <div class="col-8 head-text"><h1>Редактор счета</h1></div>
                     <div class="col-2 head-text">
-                        <button class="btn btn-toggle">
-                            <a href="main.html">
+                        <button class="btn btn-toggle" onclick="showPopup()">
+
                                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 -960 960 960" fill="var(--bs-body-color)"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                            </a>
+
                         </button>
                     </div>
                 </div>
             </div>
         </header>
+        <div class="container" id="popup-overlay">
+            <div class="row volume" id="popup">
+                <div class="row">
+                    Вы уверены, что хотите удалить группу?
+                </div>
+                <div class="col">
+                    <button class="btn mini-btn volume" id="close-popup">Отмена</button>
+                </div>
+
+                <form class="col" action="/groups/{{id}}/del" method="post">
+                    <button class="btn mini-btn volume" id="close-popup" type="submit">Удалить</button>
+                </form>
+            </div>
+        </div>
 
         <main class="sticky">
             <div class="container big-block">
-                <form action="main.html" method="get" class="needs-validation" novalidate>
+                <form action="/groups/{{id}}" method="post" class="needs-validation" novalidate>
                     
                     <div class="row c"><label for="name">Название</label></div>
                     <div class="row c">
-                        <input type="text" class="form-control hole" id="name" required>
+                        <input type="text" class="form-control hole" id="name" name="name" value="{{group['name']}}" required>
                         <div class="invalid-feedback">
                             Напишите название.
                         </div>
-                    </div>
-
-                    <div class="row c"><label for="name">Ссылка</label></div>
-                    <div class="row c">
-                        <input type="text" class="form-control hole" id="link" value="link" readonly>
                     </div>
 
                     <div class="row c"><label for="name">Описание</label></div>
@@ -155,7 +164,7 @@
 
                     <div class="row">
                         <button type="submit" class="btn btn-block volume" style="margin-block: 4%;">
-                            <h3>Создать группу</h3>
+                            <h3>Сохранить изменения</h3>
                         </button>
                     </div>
                 </form>
@@ -199,6 +208,31 @@
                 }, false)
             })
         })();
+    </script>
+<script>
+        const popupOverlay = document.getElementById('popup-overlay');
+        const popup = document.getElementById('popup');
+        const closePopupButton = document.getElementById('close-popup');
+
+        // Функция для показа всплывающего окна
+        function showPopup() {
+        popupOverlay.style.display = 'flex'; // Используем display: flex для централизации
+        }
+
+        // Функция для скрытия всплывающего окна
+        function hidePopup() {
+        popupOverlay.style.display = 'none';
+        }
+
+        // Добавляем обработчик события на кнопку закрытия
+        closePopupButton.addEventListener('click', hidePopup);
+
+        // Добавляем обработчик события на клик вне окна
+        popupOverlay.addEventListener('click', (event) => {
+        if (event.target === popupOverlay) {
+            hidePopup();
+        }
+        });
     </script>
 
 </html>

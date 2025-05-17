@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block title %}Настройки{% endblock %}
+{% block content %}
+
+<div class="card h-100 p-4 justify-content-start">
+    <div class="align-items-center">
+        <h3 class="mb-4">Настройки</h3>
+        <h3>Смена логина</h3>
+        <form action="" method="post" class="p-3 needs-validation" novalidate>
+            <div class="mb-3">
+                <div class="d-flex align-items-center">
+                    <input type="text" class="form-control me-2" id="name" required>
+                </div>
+            </div>
+            <button type="submit" class="btn shadow w-100">
+                Сменить логин
+            </button>
+        </form>
+
+        <button type="submit" class="btn shadow w-100 mt-5">
+            <a href="" class="text-decoration-none text-light">Удалить аккаунт</a>
+        </button>
+    </div>
+</div>
+
+{% endblock %}

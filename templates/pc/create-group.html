@@ -1,0 +1,93 @@
+{% extends 'layout.html' %}
+{% block title %}Группы{% endblock %}
+{% block content %}
+
+<div class="card h-100 p-4 justify-content-start">
+    <div class="d-flex align-items-center">
+        <h3>Группы</h3>
+        <div class="ms-auto btn-group dropdown-center">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 fs-5"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                Группа
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">1</a></li>
+                <li><a class="dropdown-item" href="#">2</a></li>
+                <li><a class="dropdown-item" href="#">3</a></li>
+                <li><a class="dropdown-item" href="#">создать группу</a></li>
+            </ul>
+        </div>
+    </div>
+    <form action="" method="get"
+        class="needs-validation container-fluid justify-content-around h-100 d-flex flex-column overflow-y-auto"
+        novalidate>
+        <div class="row">
+            <div class="col-xl">
+                <label for="name">Название</label>
+                <input type="text" class="form-control" id="name" required>
+                <div class="invalid-feedback">
+                    Напишите название.
+                </div>
+            </div>
+            <div class="col-xl">
+                <label for="link">Бюджет</label>
+                <input type="number" class="form-control me-2" required min="0" step="0.01" value="0.0">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl">
+                <label for="desc">Описание</label>
+                <textarea type="text" class="form-control" id="desc" rows="20" style="resize: none;"></textarea>
+            </div>
+            <div class="col-xl">
+                <p class="m-0">Участники</p>
+                <ul class="inner-shadow list-unstyled p-3 overflow-y-auto" style="height: 493px;">
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center"><i class="bi bi-person me-3"></i>Александр<a
+                            href="#" class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x "></i></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center rounded ps-2">Добавить пользователя<a href="#"
+                            class="btn text-decoration-none shadow ms-auto"><i class="fs-3 bi bi-plus"></i></a>
+                    </li>
+                </ul>
+                <p class="text-end">Кол-участников: 10</p>
+            </div>
+        </div>
+        <div class="w-100 d-flex">
+            <button class="btn shadow ms-auto me-3">
+                <a href="#" class="text-decoration-none text-light">Удалить группу</a>
+            </button>
+            <button type="submit" class="btn shadow">
+                Создать группу
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

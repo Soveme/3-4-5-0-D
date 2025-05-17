@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% block title %}Категории{% endblock %}
+{% block content %}
+
+<div class="card h-100 p-4 justify-content-start">
+    <div class="d-flex align-items-center">
+        <h3>Создать/Изменить категорию</h3>
+        <div class="ms-auto btn-group dropdown-center">
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">1</a></li>
+                <li><a class="dropdown-item" href="#">2</a></li>
+                <li><a class="dropdown-item" href="#">3</a></li>
+                <li><a class="dropdown-item" href="#">создать группу</a></li>
+            </ul>
+        </div>
+    </div>
+    <form action="" method="get"
+        class="needs-validation container-fluid justify-content-around h-100 d-flex flex-column overflow-y-auto"
+        novalidate>
+        <div class="row">
+            <div class="col-xl">
+                <p class="m-0">Категории</p>
+                <ul class="inner-shadow list-unstyled p-3 overflow-y-auto" style="height: 493px;">
+                    <li class="mb-3 d-flex align-items-center"><a href="#" class="btn text-decoration-none fs-4"><i
+                                class="bi bi-pen me-3"></i>Суши<a href="#"
+                                class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-x"></i></a></a>
+                    </li>
+                    <li class="mb-3 fs-4 d-flex align-items-center">Добавить категорию<a href="#"
+                            class="btn text-decoration-none ms-auto shadow"><i class="fs-3 bi bi-plus"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl">
+                <label for="name">Название</label>
+                <input type="text" class="form-control" required>
+                <div class="invalid-feedback">
+                    Напишите название.
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-xl">
+                <label for="name">Бюджет на месяц</label>
+                <input type="number" class="form-control" min="0.01" step="0.01" value="0.0" required>
+                <div class="invalid-feedback">
+                    Напишите Бюджет.
+                </div>
+            </div>
+        </div>
+        <div class="w-100 d-flex">
+            <button class="btn shadow ms-auto me-3">
+                <a href="#" class="text-decoration-none text-light">Удалить категорию</a>
+            </button>
+            <button type="submit" class="btn shadow">
+                Создать категорию
+            </button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

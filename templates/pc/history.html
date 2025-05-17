@@ -1,0 +1,701 @@
+{% extends 'layout.html' %}
+{% block title %}Настройки{% endblock %}
+{% block content %}
+
+	<div class="container-fluid p-3 vh-100 overflow-y-auto">
+		<div class="row">
+			<div class="col-xl-6 col-lg-6 pt-3">
+				<div class="card p-4 justify-content-between mb-3" style="height: 86.5vh;">
+					<div class="d-flex align-items-center">
+						<h3>Категории трат за:</h3>
+						<div class="ms-auto btn-group dropdown-center">
+							<button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 fs-5"
+								data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+								этот месяц
+							</button>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="#">эта неделя</a></li>
+								<li><a class="dropdown-item" href="#">этот месяц</a></li>
+								<li><a class="dropdown-item" href="#">этот год</a></li>
+								<li>
+									<form action="" method="get" class="d-flex p-2 align-items-center flex-wrap">
+										<p class="m-0 ms-2">период с</p>
+										<input type="date" name="" id="" class="text-light">
+										<p class="m-0 ms-2 mt-2">до</p>
+										<input type="date" name="" id="" class="text-light"><br>
+										<button type="submit" class="btn m-2">
+											Поиск
+										</button>
+									</form>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="chart-container h-75 w-100 mb-5">
+						<canvas id="donutChart"></canvas>
+						<div id="customLegend" class="legend-list"></div>
+					</div>
+				</div>
+				<div class="d-flex text-center align-items-stretch" style="height: 50px;">
+					<div class="btn-group dropup shadow w-100 me-3">
+						<button class="btn align-items-center rounded border-0 fs-5" data-bs-toggle="dropdown"
+							data-bs-auto-close="outside" aria-expanded="false" data-bs-offset="0,19">
+							+
+						</button>
+						<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+							<div class="mb-3">
+								<div class="d-flex align-items-center">
+									<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+										required min="0.01" step="0.01" value="0.0">
+									<p class="fs-5 m-0">₽</p>
+								</div>
+							</div>
+							<div class="mb-3">
+								<label for="cat">Категория</label><br>
+								<select class="form-select form-select-sm inner-shadow border-0"
+									aria-label="Small select example" required>
+									<option value="1">Супермаркет</option>
+									<option value="2">Еда</option>
+								</select>
+								<div class="invalid-feedback">
+									Выберите категорию
+								</div>
+							</div>
+							<div class="mb-3">
+								<label for="desc">Описание</label>
+								<textarea type="text" class="form-control" id="desc" rows="10"
+									style="resize: none;"></textarea>
+							</div>
+							<button type="submit" class="btn shadow w-100">
+								Добавить пополнение
+							</button>
+						</form>
+					</div>
+					<div class="btn-group dropup shadow w-100">
+						<button class="btn align-items-center rounded border-0 fs-5" data-bs-toggle="dropdown"
+							data-bs-auto-close="outside" aria-expanded="false" data-bs-offset="0,19">
+							-
+						</button>
+						<form action="" method="get" class="dropdown-menu p-3 needs-validation dropdown-menu-end"
+							novalidate>
+							<div class="mb-3">
+								<div class="d-flex align-items-center">
+									<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+										required min="0.01" step="0.01" value="0.0">
+									<p class="fs-5 m-0">₽</p>
+								</div>
+							</div>
+							<div class="mb-3">
+								<label for="cat">Категория</label><br>
+								<select class="form-select form-select-sm inner-shadow border-0"
+									aria-label="Small select example" required>
+									<option value="1">Супермаркет</option>
+									<option value="2">Еда</option>
+								</select>
+								<div class="invalid-feedback">
+									Выберите категорию
+								</div>
+							</div>
+							<div class="mb-3">
+								<label for="desc">Описание</label>
+								<textarea type="text" class="form-control" id="desc" rows="10"
+									style="resize: none;"></textarea>
+							</div>
+							<button type="submit" class="btn shadow w-100">
+								Добавить списание
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-xl-6 col-lg-6 pt-3">
+				<div class="card p-4" style="height: 93vh;">
+					<div class="d-flex align-items-center mb-4">
+						<h3>История</h3>
+					</div>
+					<ul class="list-unstyled pb-1 overflow-y-scroll">
+						<h5 class="mt-4">22 сентября</h5>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<h5 class="mt-4">20 сентября</h5>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+						<li>
+							<div class="ms-auto btn-group dropdown-center w-100">
+								<button
+									class="btn d-inline-flex align-items-center border-0 fs-5 align-items-center border-bottom pb-2 pt-2 w-100"
+									data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+
+									<i class="bi fs-1 bi-cart me-4"></i>
+									<h4>Супермаркет</h4>
+									<h4 class="ms-auto">-10 000 000 ₽</h4>
+								</button>
+								<form action="" method="get" class="dropdown-menu p-3 needs-validation" novalidate>
+									<div class="mb-3">
+										<div class="d-flex align-items-center">
+											<input type="number" class="form-control me-2" style="width: 90%;" id="name"
+												required min="0.01" step="0.01" value="0.0">
+											<p class="fs-5 m-0">₽</p>
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="cat">Категория</label><br>
+										<select class="form-select form-select-sm inner-shadow border-0"
+											aria-label="Small select example" required>
+											<option value="1">Супермаркет</option>
+											<option value="2">Еда</option>
+										</select>
+										<div class="invalid-feedback">
+											Выберите категорию
+										</div>
+									</div>
+									<div class="mb-3">
+										<label for="desc">Описание</label>
+										<textarea type="text" class="form-control" id="desc" rows="10"
+											style="resize: none;"></textarea>
+									</div>
+									<button type="submit" class="btn shadow w-100">
+										Изменить пополнение
+									</button>
+								</form>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+	const testData = [
+		{ category: "Еда", amount: 300 },
+		{ category: "Транспорт", amount: 150 },
+		{ category: "Развлечения", amount: 100 },
+		{ category: "Счета", amount: 200 }
+	];
+
+	const originalColors = testData.map(() => getRandomColor());
+	let selectedCategory = null;
+
+	const chartData = {
+		labels: testData.map(item => item.category),
+		datasets: [{
+			data: testData.map(item => item.amount),
+			backgroundColor: originalColors.slice(),
+			borderWidth: 0,
+			borderColor: testData.map(() => '#1C1816'),
+			borderRadius: 50,
+			spacing: 20,
+			cutout: '75%'
+		}]
+	};
+
+	const canvas = document.getElementById('donutChart');
+	const donutChart = new Chart(canvas, {
+		type: 'doughnut',
+		data: chartData,
+		options: {
+			responsive: true,
+			plugins: {
+				legend: {
+					display: false // Отключаем встроенную легенду
+				},
+				tooltip: {
+					callbacks: {
+						label: function (tooltipItem) {
+							return `${tooltipItem.label}: $${tooltipItem.raw}`;
+						}
+					},
+					enabled: true
+				}
+			},
+			hover: {
+				mode: null
+			}
+		}
+	});
+
+	// Рисуем свою легенду справа
+	const legendContainer = document.getElementById('customLegend');
+	chartData.labels.forEach((label, i) => {
+		const item = document.createElement('div');
+		item.className = 'legend-item';
+
+		const colorBox = document.createElement('span');
+		colorBox.className = 'legend-color';
+		colorBox.style.backgroundColor = originalColors[i];
+
+		const text = document.createElement('span');
+		text.textContent = label;
+
+		item.appendChild(colorBox);
+		item.appendChild(text);
+		legendContainer.appendChild(item);
+	});
+
+	canvas.addEventListener('click', (event) => {
+		const elements = donutChart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, false);
+		if (elements.length > 0) {
+			const index = elements[0].index;
+			const category = chartData.labels[index];
+
+			if (selectedCategory === category) {
+				selectedCategory = null;
+			} else {
+				selectedCategory = category;
+			}
+
+			chartData.datasets[0].borderWidth = chartData.labels.map(label =>
+				label === selectedCategory ? 6 : 2
+			);
+			chartData.datasets[0].borderColor = chartData.labels.map(label =>
+				label === selectedCategory ? '#00FF00' : '#ffffff'
+			);
+
+			donutChart.update();
+		}
+	});
+</script>
+
+{% endblock %}

@@ -6,7 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>История</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-        <link rel="stylesheet" href="main.css" type="text/css">
+        <link rel="stylesheet" href="/static/main.css" type="text/css">
+	    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
 
     <div class="balls">
@@ -23,7 +24,7 @@
                 <div class="row head-row">
                     <div class="col-2 head-text">
                         <button class="btn btn-toggle">
-                            <a href="main.html">
+                            <a href="/dashboard">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 -960 960 960" fill="var(--bs-body-color)"><path d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z"/></svg>
                             </a>
                         </button>
@@ -38,7 +39,7 @@
                     </div>
                     <div class="col-2 head-text" >
                         <button class="btn btn-toggle col">
-                            <a href="guide.html">
+                            <a href="/helper/{{id}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 -960 960 960" fill="var(--bs-body-color)"><path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z"/></svg>
                             </a>
                         </button>
@@ -49,7 +50,7 @@
 
         <main>
             <div class="container body-con">
-                
+
                 <div class="row">
                     <label for="">Бюджет на расходы</label>
                     <h1 class="money">27 258 / 50 000 ₽</h1>
@@ -90,39 +91,23 @@
                             <li><a class="dropdown-item ps-3" href="#">траты</a></li>
                             <li><a class="dropdown-item ps-3" href="#">доход</a></li>
                         </ul>
-                    </div> 
+                    </div>
                 </div>
                 <!-- 3 кнопки сверху -->
                 <div class="row">
-                    <!-- <label for="">Деньги на счету</label> -->
                     <h1 class="money">22 742 ₽</h1>
-                </div>
-                <!-- bar  -->
-                <div class="row">
-                    <div class="progress-stacked col-10">
-                        <div class="progress" role="progressbar" aria-label="Segment one" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                            <div class="progress-bar volume"></div>
-                        </div>
-                        <div class="progress" role="progressbar" aria-label="Segment two" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                            <div class="progress-bar bg-success volume"></div>
-                        </div>
-                        <div class="progress" role="progressbar" aria-label="Segment three" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
-                            <div class="progress-bar bg-info volume"></div>
-                        </div>
-                        <div class="progress" role="progressbar" aria-label="Segment four" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-                            <div class="progress-bar bg-danger volume"></div>
-                        </div>
-                        <div class="progress" role="progressbar" aria-label="Segment five" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" style="width: 35%">
-                            <div class="progress-bar bg-warning volume"></div>
-                        </div>
-                        <div class="progress" role="progressbar" aria-label="Segment six" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                            <div class="progress-bar bg-light volume"></div>
-                        </div>
+
+                    <div class="row chart-container" id="graph-collapse">
+                        <canvas id="donutChart" class="donutChart"></canvas>
+                        <div id="customLegend" class="legend-list flexy"></div>
                     </div>
                 </div>
-                <!-- bar  -->
+
+
+
+
                 <div class="row ">
-                    
+
                     <!-- один день -->
                     <label>23 Апреля</label>
                     <button class="btn btn-block">
@@ -168,16 +153,130 @@
                 </div>
 
             </div>
-            
-            
+
+
 
         </main>
 
-        
+
+        <footer class="fixed-bottom">
+            <div class="container footer-con">
+                <div class="row">
+                    <a href="/dashboard/{{id}}/plus" class="col btn-footer btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 -960 960 960" fill="var(--bs-body-color)"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                    </a>
+
+                    <a href="/dashboard/{{id}}/minus"  class="col btn-footer btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="100%" viewBox="0 -960 960 960" fill="var(--bs-body-color)"><path d="M200-440v-80h560v80H200Z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </footer>
 
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
     </body>
+
+
+<script>
+	const testData = [
+		{ category: "Еда", amount: 300 },
+		{ category: "Транспорт", amount: 150 },
+		{ category: "Развлечения", amount: 100 },
+		{ category: "Счета", amount: 200 }
+	];
+
+	const getRandomColor = () => {
+		const letters = '0123456789ABCDEF';
+		let color = '#';
+		for (let i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
+	};
+
+	const originalColors = testData.map(() => getRandomColor());
+	let selectedCategory = null;
+
+	const chartData = {
+		labels: testData.map(item => item.category),
+		datasets: [{
+			data: testData.map(item => item.amount),
+			backgroundColor: originalColors.slice(),
+			borderWidth: 0,
+            // borderColor: '#000',
+			borderRadius: 50,
+			spacing: 5,
+			cutout: '80%'
+        }]
+	};
+
+	const canvas = document.getElementById('donutChart');
+	const donutChart = new Chart(canvas, {
+		type: 'doughnut',
+		data: chartData,
+		options: {
+			responsive: true,
+			plugins: {
+				legend: {
+					display: false // Отключаем встроенную легенду
+				},
+				tooltip: {
+					callbacks: {
+						label: function (tooltipItem) {
+							return `${tooltipItem.label}: $${tooltipItem.raw}`;
+						}
+					},
+					enabled: true
+				}
+			},
+			hover: {
+				mode: null
+			}
+		}
+	});
+
+	// Рисуем свою легенду справа
+	const legendContainer = document.getElementById('customLegend');
+	chartData.labels.forEach((label, i) => {
+		const item = document.createElement('div');
+		item.className = 'legend-item';
+
+		const colorBox = document.createElement('span');
+		colorBox.className = 'legend-color';
+		colorBox.style.backgroundColor = originalColors[i];
+
+		const text = document.createElement('span');
+		text.textContent = label;
+
+		item.appendChild(colorBox);
+		item.appendChild(text);
+		legendContainer.appendChild(item);
+	});
+
+	canvas.addEventListener('click', (event) => {
+		const elements = donutChart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, false);
+		if (elements.length > 0) {
+			const index = elements[0].index;
+			const category = chartData.labels[index];
+
+			if (selectedCategory === category) {
+				selectedCategory = null;
+			} else {
+				selectedCategory = category;
+			}
+
+			chartData.datasets[0].borderWidth = chartData.labels.map(label =>
+			 	label === selectedCategory ? 3 : 1
+			);
+			chartData.datasets[0].borderColor = chartData.labels.map(label =>
+				label === selectedCategory ? '#ffffff' : '#000000'
+			);
+
+			donutChart.update();
+		}
+	});
+</script>
 
 </html>

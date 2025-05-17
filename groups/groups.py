@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request, Form
+from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.templating import Jinja2Templates
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from typing import List
@@ -9,6 +11,8 @@ from users.usermodels import User
 from .groupmodels import Group, GroupCreate, GroupUpdate, GroupSchema
 from .groupmembermodels import GroupMember, GroupMemberCreate, GroupMemberUpdate, GroupMemberSchema
 
+
+templates_mobile = Jinja2Templates(directory="templates/mobile")
 
 class GroupDomain(CRUDBase[Group, GroupCreate, GroupUpdate]):
     def __init__(self):
@@ -98,19 +102,28 @@ class GroupDomain(CRUDBase[Group, GroupCreate, GroupUpdate]):
         return db_obj
 
     def _register_routes(self):
+        @self.router.get("/create", response_class=HTMLResponse)
+        def create_groups(request: Request, current_user: User = Depends(get_current_user)):
+            return templates_mobile.TemplateResponse(name="new-group.html", context={'request': request})
+
         @self.router.post("/", response_model=GroupSchema)
         def create_group(
-                group_in: GroupCreate,
+                request: Request,
+                name: str = Form(...),
                 current_user: User = Depends(get_current_user),
                 db: Session = Depends(get_db)
         ):
+            group_in = GroupCreate(name=name)
             group = self.create(db=db, obj_in=group_in, admin_id=current_user.id)
             self.create_member(
                 db=db,
                 obj_in=GroupMemberCreate(user_id=current_user.id, group_id=group.id, role="admin"),
                 admin_id=current_user.id
             )
-            return group
+            user_agent = request.headers.get("user-agent", "").lower()
+            if "iphone" in user_agent or "ipad" in user_agent or "android" in user_agent:
+                return RedirectResponse('/dashboard', status_code=302)
+            return RedirectResponse(f'/dashboard/{current_user.groups[0].id}', status_code=302)
 
         @self.router.post("/{id}/add", response_model=GroupMemberSchema)
         def create_group_member(
@@ -160,14 +173,21 @@ class GroupDomain(CRUDBase[Group, GroupCreate, GroupUpdate]):
             return self.get_members(db=db, id=id, skip=skip, limit=limit)
 
 
-        @self.router.put("/{id}", response_model=GroupSchema)
+        @self.router.post("/{id}", response_model=GroupSchema)
         def update_group(
+                request: Request,
                 id: int,
-                group_in: GroupUpdate,
+                name: str = Form(...),
                 current_user: User = Depends(get_current_user),
                 db: Session = Depends(get_db)
         ):
-            return self.update(db=db, id=id, obj_in=group_in, user_id=current_user.id)
+            group_in = GroupUpdate(name=name)
+            self.update(db=db, id=id, obj_in=group_in, user_id=current_user.id)
+            user_agent = request.headers.get("user-agent", "").lower()
+            if "iphone" in user_agent or "ipad" in user_agent or "android" in user_agent:
+                return RedirectResponse('/dashboard', status_code=302)
+            return RedirectResponse(f'/dashboard/{current_user.groups[0].id}', status_code=302)
+
 
         @self.router.put("/{id}/edit", response_model=GroupMemberSchema)
         def update_group_member(
@@ -178,13 +198,18 @@ class GroupDomain(CRUDBase[Group, GroupCreate, GroupUpdate]):
         ):
             return self.update_member(db=db, id=id, obj_in=member_in, admin_id=current_user.id)
 
-        @self.router.delete("/{id}", response_model=GroupSchema)
+        @self.router.post("/{id}/del", response_model=GroupSchema)
         def delete_group(
+                request: Request,
                 id: int,
                 current_user: User = Depends(get_current_user),
                 db: Session = Depends(get_db)
         ):
-            return self.delete(db=db, id=id, user_id=current_user.id)
+            self.delete(db=db, id=id, user_id=current_user.id)
+            user_agent = request.headers.get("user-agent", "").lower()
+            if "iphone" in user_agent or "ipad" in user_agent or "android" in user_agent:
+                return RedirectResponse('/dashboard', status_code=302)
+            return RedirectResponse(f'/dashboard/{current_user.groups[0].id}', status_code=302)
 
         @self.router.delete("/{id}/delete", response_model=GroupMemberSchema)
         def delete_group_member(

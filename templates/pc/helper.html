@@ -1,0 +1,162 @@
+{% extends 'layout.html' %}
+{% block title %}Помощник{% endblock %}
+{% block content %}
+
+<div class="card h-100 p-4 justify-content-start">
+    <div class="d-flex align-items-center">
+        <h3>Помощник</h3>
+        <div class="ms-auto btn-group dropdown-center">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 fs-5"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                Группа
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">1</a></li>
+                <li><a class="dropdown-item" href="#">2</a></li>
+                <li><a class="dropdown-item" href="#">3</a></li>
+                <li><a class="dropdown-item" href="#">создать группу</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="d-flex h-100 flex-column pt-5">
+        <div class="w-100 shadow card mb-5 d-flex flex-row">
+            <div class="p-3 w-100 h-100">
+                <p class="fs-5">Денег счёту:</p>
+                <p class="fs-2">981 724 ₽</p>
+                <p class="back-good shadow rounded-3 p-2">Хорошо</p>
+            </div>
+            <div class="w-100 h-100 d-flex align-items-center justify-content-center"><canvas id="miniChart1"></canvas>
+            </div>
+        </div>
+        <div class="w-100 shadow card mb-5 d-flex flex-row">
+            <div class="p-3 w-100 h-100">
+                <p class="fs-5">Остаток от дохода:</p>
+                <p class="fs-2">981 724 ₽</p>
+                <p class="shadow rounded-3 p-2">Нормально</p>
+            </div>
+            <div class="w-100 h-100 d-flex align-items-center justify-content-center"><canvas id="miniChart2"></canvas>
+            </div>
+        </div>
+        <div class="w-100 shadow card d-flex flex-row">
+            <div class="p-3 w-100 h-100">
+                <p class="fs-5">Месячный бюджет:</p>
+                <p class="fs-2">981 724 ₽</p>
+                <p class="back-bad shadow rounded-3 p-2">Плохо</p>
+            </div>
+            <div class="w-100 h-100 d-flex align-items-center justify-content-center"><canvas id="miniChart3"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    // Тестовые данные: замени на свои при необходимости
+    const dataPoints1 = [100, 120, 115, 140, 160]; // Пример: возрастающий
+
+    const ctx1 = document.getElementById("miniChart1").getContext("2d");
+
+    // Выбор цвета: зелёный, если последний >= первого, иначе — красный
+    const color1 = (dataPoints1[dataPoints1.length - 1] >= dataPoints1[0]) ? 'green' : 'red';
+
+    new Chart(ctx1, {
+        type: "line",
+        data: {
+            labels: dataPoints1.map((_, i) => i),
+            datasets: [{
+                data: dataPoints1,
+                borderColor: color1,
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 0,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            }
+        }
+    });
+
+    // Тестовые данные: замени на свои при необходимости
+    const dataPoints2 = [100, 110, 115, 100, 110]; // Пример: возрастающий
+
+    const ctx2 = document.getElementById("miniChart2").getContext("2d");
+
+    // Выбор цвета: зелёный, если последний >= первого, иначе — красный
+    const color2 = (dataPoints2[dataPoints2.length - 1] >= dataPoints2[0]) ? 'green' : 'red';
+
+    new Chart(ctx2, {
+        type: "line",
+        data: {
+            labels: dataPoints2.map((_, i) => i),
+            datasets: [{
+                data: dataPoints2,
+                borderColor: color2,
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 0,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            }
+        }
+    });
+
+    // Тестовые данные: замени на свои при необходимости
+    const dataPoints3 = [100, 120, 115, 140, 99]; // Пример: возрастающий
+
+    const ctx3 = document.getElementById("miniChart3").getContext("2d");
+
+    // Выбор цвета: зелёный, если последний >= первого, иначе — красный
+    const color3 = (dataPoints3[dataPoints3.length - 1] >= dataPoints3[0]) ? 'green' : 'red';
+
+    new Chart(ctx3, {
+        type: "line",
+        data: {
+            labels: dataPoints3.map((_, i) => i),
+            datasets: [{
+                data: dataPoints3,
+                borderColor: color3,
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 0,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

@@ -290,4 +290,85 @@ label, .money{
     border: 0 !important;
 }
 
+.btn-arrow{
+    border: 0 !important;
+    justify-content: flex-start;
+}
+
+.btn-arrow::after{
+    margin-left: 5%;
+    line-height: 0;
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba(247,254,255)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    transition: transform .35s ease;
+    transform-origin: .5em 50%;
+}
+
+.btn-arrow[aria-expanded="true"] {
+    color: rgba(var(--bs-emphasis-color), .85);
+}
+
+.btn-arrow[aria-expanded="false"]::after {
+    transform: rotate(90deg);
+}
+
 /* кнопка */
+
+/* графики */
+
+.legend-list {
+    display: flex;
+    padding: 0;
+    margin-top: 3%;
+    font-size: 14px;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-inline: 5%;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    margin-inline: 2%;
+}
+
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.donutChart{
+    width: 100%;
+    margin-inline: 25%;
+    padding: 0;
+}
+
+/* графики */
+
+/* окошко */
+
+#popup-overlay {
+  position: fixed; /* Фиксированное положение */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+#popup {
+    width: 100%;
+}
+
+#close-popup {
+    height: 100%;
+    margin: 0;
+}
+
+/* окошко */
