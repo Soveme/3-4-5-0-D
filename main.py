@@ -126,3 +126,24 @@ async def helper(request: Request, id: int, current_user: User = Depends(get_cur
     if "iphone" in user_agent or "ipad" in user_agent or "android" in user_agent:
         return templates_mobile.TemplateResponse(name="guide.html", context={'request': request, 'id': id})
     # return templates_pc.TemplateResponse(name="dashboard.html", context={'request': request})
+
+
+@app.get("/c1", response_class=HTMLResponse)
+async def check(request: Request):
+    return templates_pc.TemplateResponse(name="category.html", context={'request': request})
+
+@app.get("/c2", response_class=HTMLResponse)
+async def check(request: Request):
+    return templates_pc.TemplateResponse(name="history.html", context={'request': request})
+
+@app.get("/c3", response_class=HTMLResponse)
+async def check(request: Request):
+    return templates_pc.TemplateResponse(name="helper.html", context={'request': request})
+
+@app.get("/c4", response_class=HTMLResponse)
+async def check(request: Request):
+    return templates_pc.TemplateResponse(name="create-group.html", context={'request': request})
+
+@app.get("/c5", response_class=HTMLResponse)
+async def check(request: Request):
+    return templates_pc.TemplateResponse(name="settings.html", context={'request': request})
